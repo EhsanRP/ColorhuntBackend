@@ -3,6 +3,7 @@ package com.example.colorhunt.bootstrap;
 import com.example.colorhunt.domain.Category;
 import com.example.colorhunt.domain.Palette;
 import com.example.colorhunt.repositories.CategoryRepository;
+import com.example.colorhunt.repositories.PaletteCrudRepository;
 import com.example.colorhunt.repositories.PaletteRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -22,6 +23,7 @@ public class DataBootstrapper implements CommandLineRunner {
 
     PaletteRepository paletteRepository;
     CategoryRepository categoryRepository;
+    PaletteCrudRepository paletteCrudRepository;
 
     Random rand = new Random();
 
@@ -31,7 +33,7 @@ public class DataBootstrapper implements CommandLineRunner {
         savePalettes();
     }
     private void savePalettes() {
-        if (paletteRepository.count() == 0) {
+        if (paletteCrudRepository.count() == 0) {
 
             var pastel = "#A97155 #BE8C63 #E4D1B9 #8FBDD3 #B7CADB #FDF6EC #F3E9DD #DAB88B #EEEEEE #ECA6A6 #D18CE0 #E2DEA9 #FFFBE9 #E3CAA5 #CEAB93 #AD8B73 #FF8AAE #FFB2A6 #FFF89A #9ADCFF #789395 #94B49F #B4CFB0 #E5E3C9 #C8F2EF #C3DBD9 #CDB699 #BB6464 #EFEFEF #D1D1D1 #C0A080 #7882A4 #54BAB9 #E9DAC1 #F7ECDE #FBF8F1 #FDCEB9 #D885A3 #7897AB #655D8A #E3BEC6 #EFDAD7 #9AD0EC #1572A1 #694E4E #886F6F #C1A3A3 #F3C5C5 #DACC96 #BF8B67 #9D5353 #632626 #FFBCD1 #CE7BB0 #A267AC #6867AC #FFCBCB #E7FBBE #FFFDDE #D9D7F1 #FFEFEF #7C99AC #92A9BD #D3DEDC #F4DFBA #EEC373 #CA965C #876445 #FFF9F9 #D6E5FA #BAABDA #D77FA1 #A68DAD #C7B198 #DFD3C3 #F0ECE3 #FFE6BC #E4CDA7 #C3B091 #8E806A #E2C2B9 #F2DDC1 #99A799 #D3E4CD #EED7CE #EAEAEA #FFC4E1 #FF87CA #99FEFF #94DAFF #94B3FD #B983FF #D0CAB2 #DED9C4 #96C7C1 #89B5AF #87AAAA #C8E3D4 #F6EABE #F6D7A7 #99A799 #ADC2A9 #D3E4CD #FEF5ED #EAE7C6 #BCCC9A #C37B89 #D1E8E4 #FFC898 #FFDEFA #CDF2CA #F9F3DF #FFE1AF #A2CDCD #D57E7E #C6D57E #FF7878 #E0C097 #F3F0D7 #CEE5D0 #D5BFBF #8CA1A5 #6D8299 #316B83 #CAB8FF #B5DEFF #C1FFD7 #FCFFA6 #F4D19B #D7E9F7 #FDFCE5 #F9F3DF #9D9D9D #F8F0DF #FEFBF3 #79B4B7 #F1F7E7 #E7EAB5 #BFD8B8 #E2C2B9 #5E454B #F7D59C #F3F0D7 #CEE5D0 #7F7C82 #BFA2DB #F0D9FF #F3F1F5 #11324D #6B7AA1 #C1CFC0 #E7E0C9 #6F4C5B #9E7777 #DEBA9D #F5E8C7 #EFE3D0 #D9CAB3 #87A8A4 #986D8E";
             savePalette(pastel, "Pastel");
@@ -151,10 +153,10 @@ public class DataBootstrapper implements CommandLineRunner {
             palette.setLikes(rand.nextInt(1000));
             palette.setIsApproved(true);
 
-            paletteRepository.save(palette);
+            paletteCrudRepository.save(palette);
             category.addPalette(palette);
 
-            var saved = paletteRepository.save(palette);
+            var saved = paletteCrudRepository.save(palette);
             categoryRepository.save(category);
             step++;
         }

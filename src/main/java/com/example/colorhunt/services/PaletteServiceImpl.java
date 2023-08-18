@@ -3,6 +3,7 @@ package com.example.colorhunt.services;
 import com.example.colorhunt.controllers.DTO.PaletteDTO;
 import com.example.colorhunt.converters.PaletteConverter;
 import com.example.colorhunt.repositories.CategoryRepository;
+import com.example.colorhunt.repositories.PaletteCrudRepository;
 import com.example.colorhunt.repositories.PaletteRepository;
 import com.example.colorhunt.validations.CategoryValidation;
 import com.example.colorhunt.validations.PaletteValidation;
@@ -23,7 +24,7 @@ import java.util.List;
 public class PaletteServiceImpl implements PaletteService {
 
     PaletteValidation paletteValidation;
-
+    PaletteCrudRepository paletteCrudRepository;
     CategoryRepository categoryRepository;
     CategoryValidation categoryValidation;
     PaletteRepository paletteRepository;
@@ -66,7 +67,7 @@ public class PaletteServiceImpl implements PaletteService {
 
     @Override
     public List<PaletteDTO> findAllPalettesByIdList(List<Long> idList) {
-        var palettes = paletteRepository.findAllById(idList);
+        var palettes = paletteCrudRepository.findAllByIdIn(idList);
         var paletteList= new ArrayList<PaletteDTO>();
         palettes.forEach(palette -> paletteList.add(paletteConverter.dtoMaker(palette)));
         return paletteList;
@@ -87,7 +88,7 @@ public class PaletteServiceImpl implements PaletteService {
     @Override
     public PaletteDTO updatePalette(PaletteDTO paletteDTO) {
         var newPalette = paletteConverter.entityMaker(paletteDTO);
-        newPalette = paletteRepository.save(newPalette);
+        newPalette = paletteCrudRepository.save(newPalette);
         return paletteConverter.dtoMaker(newPalette);
     }
 
@@ -95,7 +96,7 @@ public class PaletteServiceImpl implements PaletteService {
     public PaletteDTO savePalette(PaletteDTO paletteDTO) {
         var newPalette = paletteConverter.entityMaker(paletteDTO);
         newPalette.setIsApproved(true);
-        newPalette = paletteRepository.save(newPalette);
+        newPalette = paletteCrudRepository.save(newPalette);
         return paletteConverter.dtoMaker(newPalette);
     }
 
@@ -103,19 +104,19 @@ public class PaletteServiceImpl implements PaletteService {
     public void likePalette(Long paletteId) {
         var palette = paletteValidation.validateID(paletteId);
         palette.increaseLikes();
-        paletteRepository.save(palette);
+        paletteCrudRepository.save(palette);
     }
 
     @Override
     public void dislikePalette(Long paletteId) {
         var palette = paletteValidation.validateID(paletteId);
         palette.decreaseLikes();
-        paletteRepository.save(palette);
+        paletteCrudRepository.save(palette);
     }
 
     @Override
     public void deletePalette(Long paletteId) {
         var palette = paletteValidation.validateID(paletteId);
-        paletteRepository.delete(palette);
+        paletteCrudRepository.delete(palette);
     }
 }
